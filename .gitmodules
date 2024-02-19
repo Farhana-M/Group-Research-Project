@@ -1,0 +1,3 @@
+[submodule "IMU-Readings"]
+	path = IMU-Readings
+	url = https://github.com/Farhana-M/IMU-readings
