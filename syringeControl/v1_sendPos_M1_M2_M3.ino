@@ -48,7 +48,7 @@ void setup() {
   dxl.torqueOn(DXL_ID_M2);
   
   // Test connection with M3
-  if (dxl.ping(DXL_ID_M1)) {
+  if (dxl.ping(DXL_ID_M3)) {
     Serial.println("M3 is connected!");
   } else {
     Serial.println("Failed to connect to M3.");
@@ -122,13 +122,13 @@ void loop() {
   Serial.println(rawVel3);
   delay(500);  // Delay 0.5 second
 
-  // // BNO055 Outputs
-  // Serial.print("IMU || Yaw(X): ");
-  // Serial.print(euler.x());
-  // Serial.print(" | Pitch(Y): ");
-  // Serial.print(euler.y());
-  // Serial.print(" | Roll(Z): ");
-  // Serial.println(euler.z());
-  // delay(500);  // Delay 0.5 second
+  // BNO055 Outputs
+  Serial.print("IMU || Yaw(X): ");
+  Serial.print(euler.x());
+  Serial.print(" | Pitch(Y): ");
+  Serial.print(euler.y());
+  Serial.print(" | Roll(Z): ");
+  Serial.println(euler.z());
+  delay(500);  // Delay 0.5 second
 
 }

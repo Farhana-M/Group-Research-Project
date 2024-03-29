@@ -8,6 +8,8 @@
 const uint8_t DXL_DIR_PIN = 2;
 Dynamixel2Arduino dxl(Serial1, DXL_DIR_PIN);
 const uint8_t M1 = 1;  // Motor 1
+const uint8_t M2 = 2;  // Motor 2
+const uint8_t M3 = 3;  // Motor 3
 const float res = 4096.0;  // Resolution of the motor
 const float degreesPerStep = 360.0 / res;  // Degrees per step
 
@@ -29,9 +31,27 @@ void setup() {
     Serial.println("Failed to connect to M1.");
     while (1); // Stop if connection fails
   }
-  dxl.torqueOff(M1);
+  if (dxl.ping(M2)) {
+    Serial.println("M2 is connected!");
+  } else {
+    Serial.println("Failed to connect to M2.");
+    while (1); // Stop if connection fails
+  }
+  if (dxl.ping(M3)) {
+    Serial.println("M3 is connected!");
+  } else {
+    Serial.println("Failed to connect to M3.");
+    while (1); // Stop if connection fails
+  }
+  dxl.torqueOff(M3);
   dxl.setOperatingMode(M1, OP_EXTENDED_POSITION);
-  dxl.torqueOn(M1);
+  dxl.torqueOn(M3);
+
+  //dxl.writeControlTableItem(PROFILE_VELOCITY, M1, 30);
+  
+  // Move motor to initial position of 0
+  // dxl.setGoalPosition(M1, 0);
+  // delay(1000); // Wait for the motor to reach the initial position
   
 
   //BNO055 Initialisation
@@ -45,7 +65,7 @@ void setup() {
 void loop() {
   // Dynamixel Position and Velocities
   // Edit to change desired position
-  const float desPosM1 = -5000;
+  const float desPosM1 = -4096;
   // Move motor to desired position
   dxl.setGoalPosition(M1, desPosM1);
   // Get the position values for each motor
