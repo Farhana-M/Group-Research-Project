@@ -20,6 +20,9 @@ bool firstRun = true;  // flag for the homing system
 
 // Global variables for maximum positions
 int32_t maxPosM1, maxPosM2, maxPosM3;
+int32_t leadLengthM1 = 0;
+int32_t leadLengthM2 = 0;
+int32_t leadLengthM3 = 0;
 
 bool limitSwitchPressed(uint8_t pin) {
   return digitalRead(pin) == LOW;  // Assumes LOW when pressed
@@ -61,7 +64,7 @@ void setup() {
       dxl.setOperatingMode(id, OP_VELOCITY);
       dxl.torqueOn(id);
     } else {
-      Serial.print("Failed to connect to Motor " + String(id));
+      Serial.println("Failed to connect to Motor " + String(id));
       while (1)
         ;
     }
@@ -78,8 +81,11 @@ void loop() {
     firstRun = false;
     // Get the position values for each motor after homing
     maxPosM1 = dxl.getPresentPosition(DXL_ID_M1);
+    minPosM1 = maxPosM1 - leadLengthM1;
     maxPosM2 = dxl.getPresentPosition(DXL_ID_M2);
+    minPosM2 = maxPosM2 - leadLengthM2;
     maxPosM3 = dxl.getPresentPosition(DXL_ID_M3);
+    minPosM3 = maxPosM3 - leadLengthM3;
   }
 
   int32_t currentPosM1 = dxl.getPresentPosition(DXL_ID_M1);
@@ -87,17 +93,17 @@ void loop() {
   int32_t currentPosM3 = dxl.getPresentPosition(DXL_ID_M3);
 
   // Check if current position exceeds max position and handle accordingly
-  if (currentPosM1 > maxPosM1) {
+  if (currentPosM1 > maxPosM1 || currentPosM1 < minPosM1) {
     dxl.setGoalVelocity(DXL_ID_M1, 0);
-    Serial.println("Motor 1 exceeded max position, stopping motor.");
+    Serial.println("Motor 1 outside safe boundaries, stopping motor.");
   }
-  if (currentPosM2 > maxPosM2) {
+  if (currentPosM2 > maxPosM2 || currentPosM2 < minPosM2) {
     dxl.setGoalVelocity(DXL_ID_M2, 0);
-    Serial.println("Motor 2 exceeded max position, stopping motor.");
+    Serial.println("Motor 2 outside safe boundaries, stopping motor.");
   }
-  if (currentPosM3 > maxPosM3) {
+  if (currentPosM3 > maxPosM3 || currentPosM3 < minPosM3) {
     dxl.setGoalVelocity(DXL_ID_M3, 0);
-    Serial.println("Motor 3 exceeded max position, stopping motor.");
+    Serial.println("Motor 3 outside safe boundaries, stopping motor.");
   }
 
   delay(100);  // Adjust delay as needed
