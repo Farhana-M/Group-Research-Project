@@ -20,6 +20,7 @@ bool firstRun = true;  // flag for the homing system
 
 // Global variables for maximum positions
 int32_t maxPosM1, maxPosM2, maxPosM3;
+int32_t minPosM1, minPosM2, minPosM3;
 int32_t leadLengthM1 = 0;
 int32_t leadLengthM2 = 0;
 int32_t leadLengthM3 = 0;
