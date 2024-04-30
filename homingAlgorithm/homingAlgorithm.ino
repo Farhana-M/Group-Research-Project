@@ -129,7 +129,7 @@ void loop() {
   int32_t currentPosM1 = dxl.getPresentPosition(DXL_ID_M1);
   int32_t currentPosM2 = dxl.getPresentPosition(DXL_ID_M2);
   int32_t currentPosM3 = dxl.getPresentPosition(DXL_ID_M3);
-
+  dxl.setGoalVelocity(DXL_ID_M1, -200);
   // Check if current position exceeds max position and handle accordingly
   
   if (currentPosM1 > maxPosM1 || currentPosM1 < minPosM1) {
